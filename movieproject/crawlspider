@@ -1,0 +1,33 @@
+1.crawlspider
+    crawlspider是什么？
+        也是一个spider，是Spider的一个子类，所以其功能要比spider要强大
+        多的是一个功能：提取链接的功能，根据一定的规则，提取指定的链接
+    链接提取器
+        LinkExtractor(
+            alow=xxx,  # 正则表达式，要 (*)
+            deny=xxx,  # 正则表达式，不要这个
+            restrict_xpaths=xxx,  # xpath路径
+            restrict_css=xxx,  #  选择器（*）
+            deny_domains=xxx,  #  不允许的域名
+        )
+    用法演示
+        scrapy shell http://www.id97.com/movie/
+        from scrapy.linkextractors import LinkExtractor
+
+        通过正则提取链接
+        links = LinkExtractor(allow=r'/movie/\?page=\d')
+        将所有这个包含正则表达式的href全部获取到返回
+        links.extract_links(response)全部提取出来进行查看的链接
+        将重复的url去除掉
+    通过xpath提取
+        links = LinkExtractor(restrict_xpaths='//ul[@class="pagination pagination-sm"]/li/a')
+    通过css提取
+        links = LinkExtractor(restrict_css='.pagination > li > a')
+        links.extract_links(response)
+    使用crawlSpider
+        scrapy genspider -t crawl ...创建
+        第一页:  23456 366
+        2： 1  34567 366
+        3：12  45678 366
+        调度器有去重的功能
+
